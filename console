@@ -1,0 +1,585 @@
+SHOW ENIGINES; -- (menampilkan engeines pada mysql)
+
+SHOW TABLES; --  (Menampilkan table yang ada di database)
+
+CREATE TABLE item (  -- (Membuat table) 
+    id      INT NOT NULL ,
+    name    VARCHAR(150) NOT NULL DEFAULT '', -- SETTING JADIKAN NOT NULL DAN DEFAULTNYA STRING KOSONG
+    price   INT NOT NULL DEFAULT 0, -- SETTING JADIKAN NOT NULL DAN DEFAULTNYA NUMBER NOL
+    amount  INT NOT NULL DEFAULT 0  --SETTING JADIKAN NOT NULL DAN DEFAULTNYA NUMBER 0
+) ENGINE = InnoDB;
+
+DESCRIBE item; -- (melihat struktur table berupa table)
+
+DESC item; -- (sama seperti describe akan tetapi lebih singkat dalam pemanggilannya)
+
+SHOW CREATE TABLE item; -- (melihat bagaimana caranya struktur table tersebut)
+
+
+ALTER TABLE item -- (Mengedit atau menambahkan colum deskripsi)
+ADD COLUMN description TEXT;
+
+ALTER TABLE item -- (menambahkan colum salah dengan tipe data text)
+ADD COLUMN salah TEXT;
+
+ALTER TABLE item    -- (menghapus column salah)
+DROP COLUMN salah ;
+
+ALTER TABLE item    -- (Mengubah name tipe daanya dari 150 ke 300 dan tempatkan name setelah description) 
+MODIFY name VARCHAR(300) AFTER description;
+
+ALTER TABLE item    -- (Mengubah name tipe daanya dari 150 ke 300 dan tempatkan name paling pertama atau atas) 
+MODIFY name VARCHAR(300) FIRST;
+
+ALTER TABLE item    -- (Mengubah atau menambahkan null untuk id tidak boleh berisikan null)
+MODIFY id INT NOT NULL;
+
+ALTER TABLE item    -- (Mengubah atau menambahkan null untuk id tidak boleh berisikan null)
+MODIFY name VARCHAR(300) NOT NULL;
+
+ALTER TABLE item
+MODIFY amount INT NOT NULL DEFAULT 0; --(mengubah atau menambahkan null pada amount tidak bole berisi null dengan defaultnya 0)
+
+ALTER TABLE item
+MODIFY price INT NOT NULL DEFAULT 0; --(mengubah atau menambahkan null pada price tidak bole berisi null dengan defaultnya 0)
+
+ALTER TABLE item
+ADD time_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP; --( menambahkan colum time_created pada table item tidak bole berisi null dengan defaultnya current_timestampe (jika tidak diisi isi dengan waktu saat ini))
+
+--  EXAMPLE Implement select data in table --
+INSERT INTO item (id, name) VALUES (1, 'Banana'); -- (Menambahkan data id dan nama dengan nilai id = 1, nama = pisang)
+
+SELECT * FROM item; -- (Melihat data apa saja yang ada di table item)
+
+TRUNCATE item; -- (Menghapus semua data pada table item)
+
+DROP TABLE item; --(Menghapus table item berupa data-datanya secara permanen)
+
+
+-- IMPLEMENTS Insert Data --
+
+CREATE TABLE products(
+    id VARCHAR(15) NOT NULL,
+    name VARCHAR(300) NOT NULL,
+    description TEXT,
+    price INT UNSIGNED NOT NULL,
+    quantity INT UNSIGNED NOT NULL DEFAULT 0,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+) ENGINE = InnoDB;
+
+SHOW TABLES;
+
+DESCRIBE products;
+
+-- Menambahkan data ke table products --
+-- Insert data Manual --
+INSERT INTO products(id, name, price, quantity) -- (Memasukkan data id, name, price, quantity, dengan nilai Z0001, Indomie Fried Noodles, 4000, 150 (sisanya untuk creted_at akan diisi sesuai tipe data yang sudah kita buat ))
+VALUES ('Z0001', 'Indomie Fried Noodles', 4000, 150);
+
+SELECT * FROM products; -- (Melihat data dari tabel products)
+
+INSERT INTO products(id, name, price, quantity)
+VALUES ('Z0002', 'Indomie Fried Nodlles With Egg' 'Indomie Fried Noodles + Egg', 10000, 50);
+
+-- Insert data Automatic --
+INSERT INTO products(id, name, price, quantity)
+VALUES ()
+
+INSERT INTO products(id, name, price, quantity)
+VALUES('Z0003', 'Regular Fried Rice', 12000, 30),
+      ('Z0004', 'Magelangan Fried Rice', 15000, 50),
+      ('Z0005', 'Special Fried Rice', 20000, 70);
+
+INSERT INTO products(id, name, price, quantity)
+VALUES  ('Z0006', 'Scamble Rice', 10000, 20),
+        ('Z0007', 'Crazy Fried Rice', 15000, 30),
+        ('Z0008', 'Omlet Rice', 8000, 40),
+        ('Z0009', 'Pecel Rice', 16000, 50),
+        ('Z0010', 'Uduk Rice', 5000, 60),
+        ('Z0011', 'Sambal Omlete Rice', 7000, 70),
+        ('Z0012', 'Geprek Chicken Rice', 15000,80),
+        ('Z0013', 'Liwet Rice', 21000, 90),
+        ('Z0014', 'Padang Rice', 18000, 100),
+        ('Z0015', 'Grilled Rice', 8000, 110),
+        ('Z0016', 'Briyani Rice', 25000,120),
+        ('Z0017', 'Kebuli Rice', 25000, 130),
+        ('Z0018', 'Grilled Chicken Rice', 15000, 140),
+        ('Z0019', 'Tumpeng Rice', 50000, 150),
+        ('Z0020', 'Madura Duck Rice', 30000, 160);
+
+
+
+-- Select Data --
+SELECT * FROM products; --(Menampilkan data dari tabel products)
+
+-- Disclaimmer !!! Tidak apa tidak berurut --
+SELECT id, name, price, quantity FROM products; -- (Hanya Menampilkan data id, name, price, quantity dari tabel producs)
+
+SELECT name, quantity, id FROM products; -- (Hanyamenampilkan data name, quantity, id dari table products)
+
+ALTER TABLE products
+ADD PRIMARY KEY (id); -- (Menambah Primary Key pada id)
+
+-- Find Data --
+-- Disclaimmer !!! (Tidak Apa-apa Typo dikarenakan MySQL defaultnya itu case insensitive (tidak sensitif))
+SELECT * FROM products WHERE quantity = 30; -- (Mencari Data pada tabel products pada data quantitynya dengan jumlah quantity 30)
+SELECT * FROM products WHERE price = 15000; -- (Mencari Data pada tabel products pada data price dengan jumlah price  15000 rb)
+SELECT * FROM products WHERE id = 'Z0006'; -- (Mencari Data pada tabel products pada data id dengan id ke Z0006)
+SELECT * FROM products WHERE name = 'Padang Rice'; -- (Mencari Data pada tabel products pada data name dengan name padang rice)
+
+-- Updata Data --
+DESCRIBE products; -- (Melihat data table products akan tetapi data utama seperti id, name, price dan lain-lain)
+
+ALTER TABLE products -- (Menambahkan data category pada table products dengan tipe data enum yang di dalamnya terdapat value food, drinks, dan others )
+ADD COLUMN catagory ENUM('Food', 'Drinks', 'Others')
+AFTER name;
+
+SELECT * FROM products; -- (Melihat data dari table product)
+SELECT * FROM products WHERE id = 'Z0001'; --(Melihat atau menegecek lagi apakah pada table product terdapat id dengan nilai Z0001 dan ternyata hanya 1 buah, jika teradapat 2 buah atau lebih dengan id yang sama maka yang sama akan berubah semua, termasuk pada name, price dan lain-lain)
+
+UPDATE products
+SET catagory = 'Food'
+WHERE id = 'Z0001'; --(Perbarui pada table products pada data id (Z0001), tambahkan category food)
+
+UPDATE products
+SET catagory = 'Food',  -- (Perbarui pada table products pada data id (Z0004), tambahkan catagory nya yaitu = food dan descriptionnya fried rice with fried noodles)
+    description = 'fried rice with fried noodles'
+WHERE id = 'Z0004';
+
+UPDATE products
+SET catagory = 'Food'
+WHERE id IN ('Z0002', 'Z0003', 'Z0005', 'Z0006', 'Z0007', 'Z0008', 'Z0009', 'Z0010'); --(Menambahkan catagory food dari id-id ini)
+
+SELECT * FROM products WHERE id = 'Z0004'; -- (di cek dengan id tersebut)
+
+-- Disclaimmer (bisa menggunakan operasi matematika entah itu +, -, /, * dan lain-lain)
+UPDATE products
+SET price = price + 6000 -- (Menambahkan data price pada id Z0006 dari 10000 menjadi 16000)
+WHERE id = 'Z0006'; 
+
+SELECT * FROM products WHERE id = 'Z0006'; -- (di cek dengan id tersebut)
+
+-- Delete Data --
+INSERT INTO products(id, name, price, quantity) --(kita tambahkan data untuk testernya)
+VALUES ('Z0021', 'Uncooked Rice', 10000, 50);
+
+-- Disclaimmer bisa menggunakan id, name, price dan lain-lain
+DELETE FROM products --(Menghapus data pada id Z0021 pada table products)
+WHERE id = 'Z0021';
+
+-- This Alias --
+-- Disclaimmer (jika satu dua kata pake (kutip'code product ', kalo satu kata tidak usah (code)))
+SELECT id, name, catagory, price, quantity FROM products;
+
+-- Created Alias in Coloumn
+SELECT id   AS Kode,   -- --(Merubah yang tadinya id, name, catagory, price, quantity menjadi Code, Nama, Kagagori, Harga, jumlah)
+       name AS Nama,
+       catagory AS Katagori,
+       price AS Harga,
+       quantity AS Jumlah
+FROM products;
+
+-- Disclaimmer (jadi saat kita membuat alias itu sebenarnya tampilann seperti dibawah ini)
+--              (jadi kita bisa membuat alias pada nama table )
+-- SELECT products.id   AS Code, --(Merubah yang tadinya id, name, catagory, price, quantity menjadi Kode, Nama, Kagagori, Harga, jumlah)
+--        products.name AS Nama,
+--        products.catagory AS Katagori,
+--        products.price AS Harga,
+--        products.quantity AS Jumlah
+-- FROM products;
+
+-- Crated Alias in Table
+SELECT p.id   AS Kode,       -- --(Merubah yang tadinya products.id, products.name, products.catagory, products.price, products.quantity menjadi Kode, Nama, Kagagori, Harga, jumlah)
+       p.name AS Nama,
+       p.catagory AS Katagori,
+       p.price AS Harga,
+       p.quantity AS Jumlah
+FROM products AS p;
+
+-- Menambahkan Data Baru Drinks --
+INSERT INTO products(id, catagory, name, price, quantity)
+VALUES  ('Z0021', 'Drinks','Ice Tea', 5000, 200),
+        ('Z0022', 'Drinks', 'Jus Banana', 15000, 100),
+        ('Z0023', 'Drinks', 'Hot Chocolate', 25000, 50),
+        ('Z0024', 'Drinks', 'Mineral Water', 3000, 300),  
+        ('Z0025', 'Drinks', 'Orange Juice', 7000, 70); 
+
+-- Menambahkan Data Baru Others --
+INSERT INTO products(id, catagory, name, price, quantity)
+VALUES  ('Z0026', 'Others','Toast', 15000, 30),
+        ('Z0027', 'Others', 'Fried Banana', 10000, 50),
+        ('Z0028', 'Others', 'Dimsum', 20000, 70),
+        ('Z0029', 'Others', 'Tempe Mendoan', 10000, 100),  
+        ('Z0030', 'Others', 'French Fries', 15000, 150);
+
+-- Cek data yang kita buat
+SELECT * FROM products;
+
+-- Where Operator --
+SELECT * FROM products WHERE quantity > 100; --(Mencari data quantity pada table products yang quantitynya lebih dari 100 (tidak ada 100 karena bukan >=))
+SELECT * FROM products WHERE quantity >= 100; --(Mencari data quantity pada table products yang quantitynya lebih dari 100 ( ada 100 karena menggunakan >= bukan >))
+SELECT * FROM products WHERE catagory != 'Food'; --(Mencari data category pada table products yang catagory nya bukan Food )
+SELECT * FROM products WHERE catagory <> 'Drinks'; --(Mencari data category pada table products yang catagory nya bukan Drinks )
+
+-- AND dan OR Operator
+
+-- AND
+SELECT * FROM products WHERE quantity > 100 AND price > 15000; --(Mencari data products dimana yang quantity lebih dari 100 dan harganya lebih dari 1500 )  (Operator 1 = TRUE Operator 2 = TRUE (TRUE))
+SELECT * FROM products WHERE catagory = 'Food' AND price < 10000; --(Mencari data products dimana yang catagorynya makanan dan harganya kurang dari 10000)  (Operator 1 = TRUE Operator 2 = TRUE (TRUE))
+SELECT * FROM products WHERE catagory ='Food' AND price > 100000; -- (Operator 1 = TRUE Operator 2 = FALSE (FALSE))
+
+-- OR 
+SELECT id, name, price, quantity --(Mencari data id, name, price, quantity dari table products dimana quantitynya lebih besar dari 120 atau harganya lebih dari 10000) (Operator 1 = TRUE Operator 2 = TRUE (TRUE))
+FROM products
+WHERE quantity > 120 OR price > 10000;
+
+SELECT id, name, price, quantity    -- --(Mencari data id, name, price, quantity dari table products dimana quantitynya lebih besar dari 1000 atau harganya lebih dari 10000) (Operator 1 = FALSE Operator 2 = TRUE (TRUE))
+FROM products
+WHERE quantity > 1000 OR price > 10000;
+
+SELECT id, name, price, quantity    -- --(Mencari data id, name, price, quantity dari table products dimana quantitynya lebih besar dari 1000 atau harganya lebih dari 10000) (Operator 1 = FALSE Operator 2 = FALSE (FALSE))
+FROM products
+WHERE quantity > 1000 OR price > 100000;
+
+SELECT id, name, price, quantity            --  (Mencari data id, name, price, quantity dari table products dimana catagorynya food atau quantitynya lebih besar dari 150 dan harganya lebih dari 20000)  (Operator 1 = TRUE Operator 2 = TRUE Operator 3 = TRUE Hasilnya (TRUE))
+FROM products
+WHERE (catagory = 'Food' OR quantity > 150)
+    AND price > 20000;
+
+-- LIKE Operator --
+SELECT * FROM products
+WHERE name LIKE 'i%'; --(Mencari data name pada table products, cari yang namanya di mulai dari huruf i untuk semua kategori)
+
+SELECT * FROM products
+WHERE name LIKE '%e'; --(Mencari data name pada table products, cari yang namanya di akhiri dengan huruf e untuk semua kategori)
+
+SELECT * FROM products
+WHERE name LIKE '%grilled%';   --(Mencari data name pada table products, cari yang ada grillednya untuk kategori semuanya)
+
+-- Null Operator --
+SELECT * FROM products
+WHERE description IS NULL;  --(Mencari data yang desciptionnya NULL)
+
+SELECT * FROM products; -- (Melihat data dari table product)
+
+-- BETWEEN Operator --
+SELECT * FROM products  --(Mencari data yang ada pada table products dimana yang harganya antara 10000 sampai 20000)
+WHERE price BETWEEN 10000 AND 20000;
+
+SELECT * FROM products  --(Mencari data yang ada pada table products dimana yang quantitynya antara 100 sampai 200)
+WHERE quantity BETWEEN 100 AND 200;
+
+-- IN Operator --
+SELECT * FROM products   --(Mencari data pada table products yang dimana didalamnya terdapat catagory food and drinks)
+WHERE catagory IN ('Food', 'Drinks');
+
+-- Order By Clause --
+-- Disclaimmer !!! (ASC(Asecending (Terkecil)) and DESC(Descending (terbsesar)))
+SELECT *FROM products
+ORDER BY price ASC, catagory DESC; --(Mencari data pada table product yang dimana cari dari catagory dari makanan, minuman dan lain-lain. lalucarikan harganya dari termurah hingga termahal)
+SELECT *FROM products
+ORDER BY catagory ASC, price DESC; --(Mencari data pada table product yang dimana carikan harganya dari termahal hingga termurah dan cari dari catagory dari makanan, minuman dan lain-lain.)
+
+-- Limit Clause --
+SELECT * FROM products
+WHERE price > 0 ORDER BY price  -- --(Mencari data pada table products yang dimana harganya lebih dari 0 urutkan berdasarkan harganya dari yang paling kecil sampai terbesar, lalu ambil 2 pada data tersebut )
+LIMIT 2;
+
+-- Skip Results Query
+SELECT * FROM products
+WHERE price > 0 ORDER BY price -- --(Mencari data pada table products yang dimana harganya lebih dari 0 urutkan berdasarkan harganya dari yang paling kecil sampai terbesar, lalu lewatkan 2 baris pertama dari Harga yang lebih dari 0, lalu ambil 2 data pada baris berikutnya )
+LIMIT 2,2;
+
+SELECT * FROM products
+WHERE price > 5000 ORDER BY price  -- --(Mencari data pada table products yang dimana harganya lebih dari 5000 urutkan berdasarkan harganya dari yang paling kecil sampai terbesar, lalu lewatkan 3 baris pertama dari Harga yang lebih dari 5000, lalu ambil 2 data baris berikutnya)
+LIMIT 3, 6;
+
+SELECT * FROM products
+WHERE quantity > 50 ORDER BY quantity -- --(mencari data pada table products yang dimana quantitynya lebih dari 50 urutkan berdasarkan harganya dari yang paling kecil sampai terbesar,lalu ambil 2 data tersebut)
+LIMIT 2;
+
+SELECT * FROM products 
+WHERE quantity > 50 ORDER BY quantity   -- --(mencari data pada table products yang dimana quantitynya lebih dari 50 urutkan berdasarkan harganya dari yang paling kecil sampai terbesar, lalu lewatkan 5 baris pertama dari quantitynya yang lebih dari 50, lalu ambil 10 data baris berikutnya)   
+limit 5, 10;
+
+SELECT * FROM products; -- (Melihat data dari table product)
+
+-- Select Distinct Data
+SELECT catagory FROM products;  --(Melihat seluruh data apa saja yang sama pada categorynya tampilkan food nya semua, drinks maupun others)
+
+SELECT DISTINCT catagory    --(Melihat hanya data utamanya tidak denga duplikat lainnya yaitu food, drink, others, maupun null (belum diisi datanya))
+FROM products;
+
+-- Nameric Function --
+
+-- Arithmetic Operator
+SELECT 10 + 10 as amount; --(10 + 10 as bisa dihartikan hasil jadi 10 + 10 = 20 tampilkan pada bentuk table)
+
+SELECT 10, 10, 10 * 10 as amount;   --(kalo ini 10, 10, tampilkan pada table, lalu 10 * 10 = 100)
+
+SELECT id, name, price, price DIV 1000 as 'Price in K'  -- --(Memilih data id, name, price, dan price akan tetapi yang ini di bagi 1000 tampilkan pada table price in k, semunya tampilkan pada bentuk table )
+FROM products;                                          --(Biasanya digunakan untuk harga di indonesia kan 1000 = seribu kalo do luar negri jadinya 1k)
+
+--Mathematical Function
+SELECT id, COS(price), SIN(price), TAN(price) FROM products;
+
+SELECT id, name, price
+FROM products       --( (memilih data id, name dan price pada table product dimana price tersebut dibagi 1000 dan pilih  data price lebih hasilnya sudah dibagi 1000 akan tetapi yang besar 10 )
+WHERE price DIV 1000 > 10;
+
+SELECT PI();
+SELECT POWER(10, 2);
+SELECT COS(60);
+SELECT SIN(60);
+SELECT TAN(60);
+
+-- Auto Increment --
+-- Membuat tabel dengan Auto Increment
+CREATE Table admin(
+    id INT NOT NULL AUTO_INCREMENT,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    PRIMARY KEY(id)
+) ENGINE = InnoDB;
+
+DESCRIBE admin;
+
+INSERT INTO admin(first_name, last_name)
+VALUES  ('Hasby', 'Aiman'),
+        ('Kelas', 'Divergent'),    --(Menambah data pada table admin first_name dan last_name dengan nama tersebut akan tetapi tidak perlu menambahkan idnya karena sudah otomatis = 1, 2, 3, dan seterusnya)
+        ('Insurgent', 'Allegiant');
+SELECT * FROM admin ORDER BY id;    --(Melihat datanya setekah dibuat diatas akan tapi tampilkan idnya) = (Menjadi 1, 2, 3)
+DELETE FROM admin WHERE id = 3;      --(Menghapus data pada table admin dimana id no 3) == (Hasilnya data dari id no 3 dihapus)
+INSERT INTO admin(first_name, last_name)    --(Saat kita tambahkan data terbaru lagi akan tetapi id nya tidak menjadi 3 akan tetapi 4 lalu 5 lalu 6 karena itu merupakan default dari auto incrementnya)
+VALUES ('Favorite', 'Lesson');              
+INSERT INTO admin(first_name, last_name)    
+VALUES ('Fine', 'Divergent');              
+INSERT INTO admin(first_name, last_name)    
+VALUES ('Kamvret', 'Divergent');              
+
+SELECT * FROM admin ORDER BY id;    --(Melihat datanya setekah dibuat diatas akan tapi tampilkan idnya) = (Menjadi 1, 2, 4)
+
+SELECT LAST_INSERT_ID() --(Ini untuk melihat ada berapa id yang sudah dibuat melihat dari kode diatas yang pertama ditambahkan 3 data, lalu dihapus 1 data dan ditambahkan 3 lagi jadinya tetap ada 6 yang terhapus tetap kehitung )
+
+-- String Function --
+SELECT id, LOWER(name) as 'Name Lower'  --(Melihat id, dan melihat data name ubah menjadi huruf biasa semua pada data name)
+FROM products;
+SELECT id, UPPER(name) as 'Name Upper'  --(Melihat id, dan melihat data name ubah menjadi huruf Kapital semua pada data name)
+FROM products;
+SELECT id, name, LENGTH(name) as 'Name Length'  --(Melihat berapa jumlah kata atau panjang kata (spasi dihitung) pada id danme di table product)
+FROM products;
+
+-- Date and Time Function
+-- Use Coloumn Timestampe
+SELECT id, created_at,                          -- --(Melihat kolom  dari data id dan created_at)
+    EXTRACT(YEAR FROM created_at) AS 'Year',    -- --(Melihat tahun berapa data created_at itudibuat)
+    EXTRACT(MONTH FROM created_at) AS 'Month'    -- --(Melihat tahun berapa data created_at itudibuat)
+FROM products;
+
+SELECT ID, YEAR(created_at), MONTH(created_at)  -- (Melihat kolom id,  tahun berapa dan bulan apa dibuatnya)
+FROM products;
+
+
+-- Flow Control Function --
+-- Use Control Flow Case
+--(Melihat colomid, pada category ketika category dari data id tersebut food ubah menjadi delicious dan jika pada drinks ubah menjadi fresh selain itu seperti others atau tidak ada categorynya ubah menjadi Whats That??? )
+SELECT id,
+    CASE catagory       
+        WHEN 'Food' THEN 'Delicious'   
+        WHEN 'Drinks' THEN  'Fresh'
+        ELSE 'Whats That???' 
+    END AS 'Catagory'
+FROM products;
+
+-- Use Control Flow IF
+-- Menampilkan colom pada id, price, jika price lebih kecil sama dengan 15000 tampilkan cheap, dan jika price lebih kecil sama dengan 30000 tampilkan Expensive dan Really Expensive
+SELECT id,
+        price,
+        IF(price <= 15000, 'Cheap',
+            IF(price <= 30000, 'Expensive', 'Really Expensive'
+         ))
+    AS 'Expensive?'
+FROM products;
+
+-- Use Control Flow IFNULL
+-- Menampilkan coloumn pada id, name, jika dia  descriptionnya NULL tampilkan kolom IFNULL isi dengan Empty 
+SELECT id, name, IFNULL(description, 'Empty') FROM products;
+
+-- Aggregate Function --
+-- SELECT COUNT(id), name AS 'Amount Product' FROM products; -- (this Error because not merge select column basic)
+SELECT COUNT(id) AS 'Amount Product' FROM products; --(Menampikan berapa jumlah data yang ada pada product)
+SELECT AVG(price) AS 'Averange' FROM products;      --(Menampilkan rata-rata dari semua harga yang ada pada product)
+SELECT MAX(price) AS 'Expensive Price' FROM products;   --(Menampilkan harga yang paling mahal pada product)
+SELECT MIN(price) AS 'Cheap Price' FROM products;       --(Menampilkan harga yang paling murah pada product
+SELECT SUM(quantity) AS 'Amount Stock' FROM products;   --(Menampilkan berapa jumlah stok atau quantity pada product )
+
+-- Groupping --
+-- Use GROUP BY
+SELECT catagory,        -- --(Melihat semua jumlah pada catagory ada 10 food, 10 null, 5 drinks, dan 5 others  )
+    COUNT(id) as 'Amount Product'
+FROM products
+GROUP BY catagory;
+SELECT SUM(quantity) AS 'Amount Stock', catagory        - --(Melihat semua jumlah pada quantity ada 550 food, 1150 null, 720 drinks, dan 400 others  )
+FROM products
+GROUP BY catagory;
+
+-- Use Having Clause
+SELECT catagory,
+    COUNT(id) as amount
+FROM products
+GROUP BY catagory
+HAVING amount > 1;
+
+-- Use Having clause
+SELECT COUNT(id) as amount,
+        catagory
+FROM products       --(Melihat data id dengan jumlah pada catagory dari table products jadi kan kolom catagory yang punya jumlah lebih dari 5 ada 9 buah)
+GROUP BY catagory
+HAVING amount > 5;
+
+show tables;
+
+-- Create table use Unique Constraint --
+-- Menambahkan data menggunakan unique constraint dengan menyeting id sebagai primary keynya dan unique key pada email sehingga jika ada orang yang ingin memasukkan email yang sama maka akan di tolak
+-- Unique Constraint
+CREATE TABLE customers(
+    id  INT NOT NULL AUTO_INCREMENT,
+    email   VARCHAR(100) NOT NULL,
+    first_name  VARCHAR(100) NOT NULL,
+    last_name   VARCHAR(100) NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY email_unique (email)     -- ---(Boleh lebih dari satu)
+)ENGINE = innoDB;
+
+DESCRIBE customers;
+
+ALTER TABLE customers   --  ---(Menghapus Unique key pada email)
+DROP  CONSTRAINT email_unique;
+
+ALTER TABLE customers   --  ---(Menambahkan Unique key lagi pada email)
+ADD CONSTRAINT email_unique UNIQUE (email);
+
+INSERT INTO customers(email, first_name, last_name) --  ---(Menambahkan data email, first_name, last_name dengan nilai hasby@gmail.com, hasby, dan aiman)
+VALUES ('hasby@gmail.com', 'Hasby', 'Aiman');
+-- Jika kita menambahkan data yang sama pada diatas tidak bisa dikarenakan pada email sudah di setting unique tidak bisa di duplikat
+INSERT INTO customers(email, first_name, last_name) --  ---(Menambahkan data email, first_name, last_name dengan nilai hasby@gmail.com, hasby, dan aiman)
+VALUES ('aiman@gmail.com', 'Hasby', 'Aiman');
+--jika seperti ini bisa dikarenakan email yang pertama denan kedua berbeda
+SELECT *FROM customers;
+
+-- Check Constraint --
+
+SELECT * FROM products;
+INSERT INTO products(id, name, catagory, price, quantity)
+VALUES ('Z0031', 'Candy', 'Others', 500, 1000);
+UPDATE products
+SET price = 1500
+WHERE id = 'Z0031';
+
+-- Ini merupakan Validation pada mysql jadi kita bisa menggunakan ini pada saat menambahkan data
+ALTER table products -- ---(Mengubah table product, dengan menambahkan constraint price_check dengan price harus lebih besar sama dengan 1000. jika kita menambahkan data kurang dari 1000 maka akan di tolak karena ada validation yang kita buat yaitu ini )
+ADD CONSTRAINT price_check CHECK (price >= 1000);
+SHOW create TABLE products;
+
+ALTER TABLE products    --- --(Menghapus price check yang sebelumnya kita buat (mengahpus validation))
+DROP CONSTRAINT price_check
+
+-- Index --
+-- Create table use index
+CREATE Table sellers(
+    id INT NOT NULL AUTO_INCREMENT, 
+    name VARCHAR(100) NOT NULL,
+    name2 VARCHAR(100),
+    name3 VARCHAR(100),
+    email VARCHAR(100) NOT NULL, 
+    PRIMARY KEY (id), -- Menentukan kolom `id` sebagai primary key
+    UNIQUE KEY email_unique (email), -- Membuat constraint unik pada kolom `email`
+    INDEX name_index (name), -- Membuat indeks pada kolom `name`
+    INDEX name2_index (name2), -- Membuat indeks pada kolom `name2`
+    INDEX name3_index (name3), -- Membuat indeks pada kolom `name3`
+    INDEX name1_name2_name3_index (name, name2, name3) -- Membuat indeks gabungan pada `name`, `name2`, dan `name3`
+) ENGINE = InnoDB;
+
+DROP table sellers;
+DESCRIBE sellers;
+DESC sellers;
+
+SHOW CREATE TABLE sellers;
+SELECT * FROM sellers WHERE name = 'X';
+SELECT * FROM sellers WHERE name2 = 'X' AND name2 = 'X';
+SELECT * FROM sellers WHERE name2 = 'X' AND name2 = 'X' AND name3 = 'X';
+
+-- Add or Delete Index
+ALTER TABLE sellers --- --(Menambahkan data index)
+ADD INDEX name_index (name);
+
+ALTER TABLE sellers --- --(Menghapus data index)
+DROP INDEX name_index;
+
+-- Full Text Search --
+-- Create Table use Full-Text Seatch
+CREATE TABLE products
+
+-- Menambahkan Full-Text Search
+ALTER TABLE products        -- Menambahkan indeks full-text pada kolom `name` dan `description` untuk pencarian teks yang lebih efisien
+ADD FULLTEXT product_fulltext (name, description);
+
+SHOW CREATE TABLE products; ADD     -- Menampilkan struktur tabel termasuk full-text index
+
+SELECT * FROM products;     -- Menampilkan semua data dari tabel products
+
+-- Search use Natural Language Mode
+-- Before
+-- Pencarian teks secara langsung dengan operator LIKE, namun performanya lambat untuk data besar
+SELECT * FROM products WHERE name LIKE '%Rice' OR description LIKE '%Rice%';
+-- After use Natural Language Mode
+SELECT * FROM products 
+WHERE MATCH(name, description)      -- MATCH digunakan untuk mencocokkan kolom dengan indeks full-text
+            AGAINST('Rice' IN NATURAL LANGUAGE MODE);    -- Pencarian dilakukan dalam mode Natural Language, menghasilkan hasil berdasarkan relevansi
+                           
+--  Search Use Boolean Mode
+SELECT * FROM products                                  -- Menggunakan Boolean Mode untuk pencarian spesifik:
+WHERE MATCH(name, description)                          -- 'Rice': mencari hasil dengan kata "Rice"
+            AGAINST('Rice -Fried' IN BOOLEAN MODE);     -- '-Fried': mengecualikan hasil dengan kata "Fried" 
+
+
+-- Search Use Query Expansion Mode
+SELECT * FROM products              -- Menggunakan Query Expansion untuk memperluas pencarian
+WHERE MATCH(name, description)      -- Sistem akan mencocokkan istilah yang dicari, kemudian mencocokkannya dengan istilah terkait di dokumen lain
+            AGAINST('Fried' WITH QUERY EXPANSION );
+
+-- Foreign Key --
+-- Create table use Foreign Key
+CREATE TABLE wishlist(
+    id  INT NOT NULL AUTO_INCREMENT,
+    id_product VARCHAR(15) NOT NULL,
+    description TEXT,
+    PRIMARY KEY(id),
+    CONSTRAINT fk_wishlist_product
+        FOREIGN KEY (id_product) REFERENCES products (id)
+) ENGINE = InnoDB
+
+DESC wishlist;
+SHOW TABLES;
+
+DROP TABLE wishlist;
+
+SHOW CREATE TABLE wishlist;
+
+ALTER TABLE wishlist
+DROP CONSTRAINT fk_wishlist_product;
+
+ALTER TABLE wishlist
+    ADD CONSTRAINT fk_wishlist_product       
+    FOREIGN KEY (id_product) REFERENCES products (id);
+
+
+INSERT INTO wishlist(id_product, description)
+VALUES ('Z0006', 'Favorite Foods');
+INSERT INTO wishlist(id_product, description)
+VALUES ('FALSE', 'Favorite Foods');
+
+SELECT * FROM wishlist;
+
+DELETE WHERE FROM products     --( Ini tidak bisa dikarenakan sudah ada relasi antara id yang lainnya)
+WHERE id = 'Z0001';
