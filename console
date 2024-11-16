@@ -550,6 +550,8 @@ WHERE MATCH(name, description)      -- Sistem akan mencocokkan istilah yang dica
 
 -- Foreign Key --
 -- Create table use Foreign Key
+-- Membuat tabel `wishlist` dengan kolom: id (primary key), id_product, dan description.
+-- id_product memiliki foreign key yang merujuk ke kolom id pada tabel `products`.
 CREATE TABLE wishlist(
     id  INT NOT NULL AUTO_INCREMENT,
     id_product VARCHAR(15) NOT NULL,
@@ -559,27 +561,102 @@ CREATE TABLE wishlist(
         FOREIGN KEY (id_product) REFERENCES products (id)
 ) ENGINE = InnoDB
 
-DESC wishlist;
-SHOW TABLES;
+DESC wishlist;      -- Menampilkan struktur tabel `wishlist` (kolom dan tipenya).
+SHOW TABLES;      -- Menampilkan semua tabel yang ada di database saat ini
 
-DROP TABLE wishlist;
+DROP TABLE wishlist;       -- Menghapus tabel `wishlist` beserta datanya. 
 
-SHOW CREATE TABLE wishlist;
+SHOW CREATE TABLE wishlist;     -- Menampilkan perintah SQL yang digunakan untuk membuat tabel `wishlist`.
 
 ALTER TABLE wishlist
-DROP CONSTRAINT fk_wishlist_product;
+DROP CONSTRAINT fk_wishlist_product;    -- Menghapus constraint (foreign key) fk_wishlist_product dari tabel `wishlist`.
+
+
+-- Menambahkan kembali foreign key fk_wishlist_product dengan aturan:
+-- ON DELETE CASCADE: jika data dihapus di tabel `products`, data terkait di `wishlist` juga dihapus.
+-- ON UPDATE CASCADE: jika id pada tabel `products` diperbarui, data di `wishlist` juga diperbarui.
 
 ALTER TABLE wishlist
     ADD CONSTRAINT fk_wishlist_product       
-    FOREIGN KEY (id_product) REFERENCES products (id);
+    FOREIGN KEY (id_product) REFERENCES products (id)  
+        ON DELETE CASCADE ON UPDATE CASCADE;
 
-
+-- Menambahkan data ke tabel `wishlist` dengan id_product 'Z0006'.
 INSERT INTO wishlist(id_product, description)
 VALUES ('Z0006', 'Favorite Foods');
+-- Upaya memasukkan data dengan id_product 'FALSE' (kemungkinan akan gagal jika foreign key tidak cocok).
 INSERT INTO wishlist(id_product, description)
 VALUES ('FALSE', 'Favorite Foods');
 
+-- Menampilkan semua data dari tabel `wishlist`.
 SELECT * FROM wishlist;
 
-DELETE WHERE FROM products     --( Ini tidak bisa dikarenakan sudah ada relasi antara id yang lainnya)
+-- Upaya menghapus data dari tabel `products` dengan id 'Z0001' (syntax salah: 'WHERE FROM' seharusnya 'DELETE FROM').
+DELETE WHERE FROM products     
 WHERE id = 'Z0001';
+
+-- Menambahkan data baru ke tabel `products`.
+INSERT INTO products(id, name, catagory, price, quantity)
+VALUES ('ZXXXX', 'Example', 'Others', 1000, 1000)
+
+-- Menampilkan semua data dari tabel `products`.
+SELECT * FROM products;
+-- Menambahkan data ke tabel `wishlist` dengan id_product 'ZXXXX'
+INSERT INTO wishlist(id_product, description)
+VALUES ('ZXXXX', 'Favorite Foods');
+
+-- Menghapus data dari tabel `products` dengan id 'ZXXXX'.
+-- Karena ada foreign key dengan aturan ON DELETE CASCADE,
+-- jika data ini dihapus, data terkait di tabel `wishlist` juga akan terhapus.
+DELETE FROM products   
+WHERE id = 'ZXXXX';
+
+
+-- Join --
+SELECT * FROM wishlist JOIN products ON (wishlist.id_product =  products.id);
+
+-- Use Alias to create table in customers
+-- Before Use Alias
+SELECT wishlist.id, products.id, products.name, wishlist.description
+FROM wishlist
+JOIN products ON (wishlist.id_product = products.id);
+
+-- After Use Alias
+SELECT w.id, p.id, p.name, w.description
+FROM wishlist AS w
+JOIN products  AS p ON (w.id_product = p.id);
+
+SELECT w.id   AS id_wishlist, 
+       p.id   AS  id_product,
+       p.name AS product_name,
+       w.description AS wishlist_description
+FROM wishlist AS w
+JOIN products AS p ON (w.id_product = p.id);
+
+-- Create relation to table customers
+DESC customers;
+
+show TABLES;
+
+ALTER TABLE wishlist
+ADD COLUMN id_customers INT;
+
+ALTER TABLE wishlist
+ADD CONSTRAINT fk_wishlist_customers
+FOREIGN KEY (id_customers) REFERENCES customers(id);
+
+SHOW CREATE TABLE wishlist;
+
+SELECT * FROM customers;
+
+UPDATE wishlist
+SET id_customers = 1
+WHERE id = 1;
+
+SELECT * FROM wishlist;
+
+-- Select to Join Multiple table
+SELECT customers.email, products.id, products.name, wishlist.description
+FROM wishlist
+JOIN products ON (products.id = wishlist.id_product)
+JOIN  customers ON (customers.id = wishlist.id_customers);
