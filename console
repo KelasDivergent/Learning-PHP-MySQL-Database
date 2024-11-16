@@ -613,19 +613,28 @@ WHERE id = 'ZXXXX';
 
 
 -- Join --
+-- Melakukan join sederhana antara tabel `wishlist` dan `products` berdasarkan 
+-- relasi foreign key (wishlist.id_product = products.id).
 SELECT * FROM wishlist JOIN products ON (wishlist.id_product =  products.id);
+
 
 -- Use Alias to create table in customers
 -- Before Use Alias
+-- Menggunakan query tanpa alias untuk memilih kolom tertentu dari tabel `wishlist` 
+-- dan `products` yang digabungkan menggunakan JOIN.
 SELECT wishlist.id, products.id, products.name, wishlist.description
 FROM wishlist
 JOIN products ON (wishlist.id_product = products.id);
 
+
 -- After Use Alias
+-- Menggunakan alias (`w` untuk `wishlist` dan `p` untuk `products`) agar query lebih singkat.
 SELECT w.id, p.id, p.name, w.description
 FROM wishlist AS w
 JOIN products  AS p ON (w.id_product = p.id);
 
+-- Menggunakan alias dengan menambahkan nama deskriptif untuk kolom yang dihasilkan 
+-- menggunakan `AS`. Ini membantu pembaca memahami isi data di hasil query.
 SELECT w.id   AS id_wishlist, 
        p.id   AS  id_product,
        p.name AS product_name,
@@ -634,28 +643,44 @@ FROM wishlist AS w
 JOIN products AS p ON (w.id_product = p.id);
 
 -- Create relation to table customers
-DESC customers;
 
-show TABLES;
+DESC customers;     -- Menampilkan struktur tabel `customers` untuk melihat kolom yang tersedia.
 
+show TABLES;        -- Menampilkan daftar tabel yang ada di database untuk memastikan tabel tersedia.
+
+-- Menambahkan kolom baru bernama `id_customers` di tabel `wishlist` 
+-- untuk menyimpan relasi dengan tabel `customers`
 ALTER TABLE wishlist
 ADD COLUMN id_customers INT;
 
+-- Menambahkan constraint foreign key di kolom `id_customers` 
+-- yang merujuk ke kolom `id` di tabel `customers`.
 ALTER TABLE wishlist
 ADD CONSTRAINT fk_wishlist_customers
 FOREIGN KEY (id_customers) REFERENCES customers(id);
 
+-- Menampilkan perintah SQL yang digunakan untuk membuat tabel `wishlist`, 
+-- termasuk perubahan yang baru saja ditambahkan (foreign key dan kolom baru).
 SHOW CREATE TABLE wishlist;
 
+-- Menampilkan semua data dari tabel `customers` untuk memverifikasi isinya.
 SELECT * FROM customers;
 
+-- Memperbarui data di tabel `wishlist`, 
+-- menetapkan nilai `id_customers = 1` pada baris dengan `id = 1`
 UPDATE wishlist
 SET id_customers = 1
 WHERE id = 1;
 
+-- Menampilkan semua data dari tabel `wishlist` untuk melihat perubahan yang dilakukan.
 SELECT * FROM wishlist;
 
 -- Select to Join Multiple table
+-- Melakukan join pada tiga tabel: `wishlist`, `products`, dan `customers`.
+-- Data yang diambil:
+-- - `customers.email` dari tabel `customers`.
+-- - `products.id` dan `products.name` dari tabel `products`.
+-- - `wishlist.description` dari tabel `wishlist`.
 SELECT customers.email, products.id, products.name, wishlist.description
 FROM wishlist
 JOIN products ON (products.id = wishlist.id_product)
